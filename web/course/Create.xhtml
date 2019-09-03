@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CourseCreateDlg" widgetVar="CourseCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCourseTitle}">
+            <h:form id="CourseCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{courseController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateCourseLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{courseController.selected.id}" title="#{bundle.CreateCourseTitle_id}" required="true" requiredMessage="#{bundle.CreateCourseRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateCourseLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{courseController.selected.name}" title="#{bundle.CreateCourseTitle_name}" required="true" requiredMessage="#{bundle.CreateCourseRequiredMessage_name}"/>
+                        <p:outputLabel value="#{bundle.CreateCourseLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{courseController.selected.type}" title="#{bundle.CreateCourseTitle_type}" required="true" requiredMessage="#{bundle.CreateCourseRequiredMessage_type}"/>
+                        <p:outputLabel value="#{bundle.CreateCourseLabel_description}" for="description" />
+                        <p:inputText id="description" value="#{courseController.selected.description}" title="#{bundle.CreateCourseTitle_description}" />
+                        <p:outputLabel value="#{bundle.CreateCourseLabel_teacherId}" for="teacherId" />
+                        <p:selectOneMenu id="teacherId" value="#{courseController.selected.teacherId}" required="true" requiredMessage="#{bundle.EditCourseRequiredMessage_teacherId}">
+                            <f:selectItems value="#{teacherController.itemsAvailableSelectOne}"
+                                           var="teacherIdItem"
+                                           itemValue="#{teacherIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{courseController.create}" value="#{bundle.Save}" update="display,:CourseListForm:datalist,:growl" oncomplete="handleSubmit(args,'CourseCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="CourseCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SectionEditDlg" widgetVar="SectionEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditSectionTitle}">
+            <h:form id="SectionEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{sectionController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditSectionLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{sectionController.selected.id}" title="#{bundle.EditSectionTitle_id}" required="true" requiredMessage="#{bundle.EditSectionRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditSectionLabel_chapterName}" for="chapterName" />
+                        <p:inputText id="chapterName" value="#{sectionController.selected.chapterName}" title="#{bundle.EditSectionTitle_chapterName}" />
+                        <p:outputLabel value="#{bundle.EditSectionLabel_text}" for="text" />
+                        <p:inputTextarea rows="4" cols="30" id="text" value="#{sectionController.selected.text}" title="#{bundle.EditSectionTitle_text}" />
+                        <p:outputLabel value="#{bundle.EditSectionLabel_imagePath}" for="imagePath" />
+                        <p:inputText id="imagePath" value="#{sectionController.selected.imagePath}" title="#{bundle.EditSectionTitle_imagePath}" />
+                        <p:outputLabel value="#{bundle.EditSectionLabel_vedioPath}" for="vedioPath" />
+                        <p:inputText id="vedioPath" value="#{sectionController.selected.vedioPath}" title="#{bundle.EditSectionTitle_vedioPath}" />
+                        <p:outputLabel value="#{bundle.EditSectionLabel_course}" for="course" />
+                        <p:selectOneMenu id="course" value="#{sectionController.selected.course}" required="true" requiredMessage="#{bundle.EditSectionRequiredMessage_course}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{courseController.itemsAvailableSelectOne}"
+                                           var="courseItem"
+                                           itemValue="#{courseItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{sectionController.update}" value="#{bundle.Save}" update="display,:SectionListForm:datalist,:growl" oncomplete="handleSubmit(args, 'SectionEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="SectionEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
