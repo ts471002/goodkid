@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package student;
 
+import entity.AbstractFacade;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author ts
  */
 @Stateless
-public class CourseFacade extends AbstractFacade<Course> {
+public class StudentFacade extends AbstractFacade<Student> {
 
     @PersistenceContext(unitName = "goodkidPU")
     private EntityManager em;
@@ -24,8 +25,8 @@ public class CourseFacade extends AbstractFacade<Course> {
         return em;
     }
 
-    public CourseFacade() {
-        super(Course.class);
+    public StudentFacade() {
+        super(Student.class);
     }
     
 }

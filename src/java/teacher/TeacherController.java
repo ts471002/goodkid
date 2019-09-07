@@ -1,9 +1,11 @@
-package entity;
+package teacher;
 
+import course.Course;
 import entity.util.JsfUtil;
 import entity.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -22,11 +24,84 @@ import javax.faces.convert.FacesConverter;
 public class TeacherController implements Serializable {
 
     @EJB
-    private entity.TeacherFacade ejbFacade;
+    private teacher.TeacherFacade ejbFacade;
     private List<Teacher> items = null;
     private Teacher selected;
+    private Integer id;
+    private String username;
+    private String email;
+    private String password;
+    private String description;
 
     public TeacherController() {
+    }
+
+    public String teacherLogin() {
+        Teacher teacher = ejbFacade.find(id);
+        if (teacher == null || !teacher.getPassword().equals(password)) {
+            return "/login.xhtml";
+        } else {
+            return "/tecenter/tecenter_index.xhtml";
+        }
+    }
+    public String logout() {
+        this.id = null;
+        return "/index.xhtml";
+    }
+    
+    public String register() {
+        Teacher teacher = new Teacher(id, username, email, password);
+        teacher.setDescription(description);
+        ejbFacade.create(teacher);
+        return "/index.xhtml";
+    }
+    
+    public Collection<Course> getCoursesByTeacherId() {
+        return ejbFacade.find(id).getCourseCollection();
+    }
+
+    public Teacher getTeacherByTeacherId() {
+        return ejbFacade.find(id);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Teacher getSelected() {
@@ -36,6 +111,7 @@ public class TeacherController implements Serializable {
     public void setSelected(Teacher selected) {
         this.selected = selected;
     }
+
 
     protected void setEmbeddableKeys() {
     }

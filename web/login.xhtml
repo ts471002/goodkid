@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="usertemplate.xhtml">
+        <ui:define name="title">
+            <h:outputText value="登录"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <p:tabView class="panel">
+                <p:tab title="学生登录">
+                    <h:form>
+                        <p:messages />
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="studentId" value="ID" />
+                            <p:inputText id="studentId" title="学生ID" value="#{studentController.id}" required="true" maxlength="25" />
+                            <p:message for="studentId" />
+
+                            <p:outputLabel for="studentPassword" value="密码" />
+                            <p:password id="studentPassword" title="学生密码" value="#{studentController.password}" required="true" maxlength="25" />
+                            <p:message for="studentPassword" />
+
+                            <p:commandButton id="submit" value="登录" action="#{studentController.studentLogin}" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title="老师登录">
+                    <h:form>
+                        <p:messages />
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="teacherId" value="ID" />
+                            <p:inputText id="teacherId" title="老师ID" value="#{teacherController.id}" required="true" maxlength="25" />
+                            <p:message for="teacherId" />
+
+                            <p:outputLabel for="teacherPassword" value="密码" />
+                            <p:password id="teacherPassword" title="老师密码" value="#{teacherController.password}" required="true" maxlength="25" />
+                            <p:message for="teacherPassword" />
+
+                            <p:commandButton id="submit" value="登录" action="#{teacherController.teacherLogin}" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </ui:define>
+    </ui:composition>
+</html>

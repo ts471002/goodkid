@@ -1,27 +1,120 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-        <h:outputStylesheet name="css/jsfcrud.css"/>
-    </h:head>
-    <h:body>
-        Hello from
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces 欢迎使用页" />
-        <br />
-        <h:link outcome="/course/List" value="Show All Course Items"/>
-        <br />
-        <h:link outcome="/section/List" value="Show All Section Items"/>
-        <br />
-        <h:link outcome="/student/List" value="Show All Student Items"/>
-        <br />
-        <h:link outcome="/teacher/List" value="Show All Teacher Items"/>
-    </h:body>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css"></link>
+                <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+                <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+                <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+                <title>goodkid</title>
+            </f:facet>
+        </h:head>
 
+        <h:body>
 
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north">
+                    <h2>Goodkid</h2>
+                    <p:tabMenu activeIndex="#{param.i}">
+                        <p:menuitem value="主页" outcome="/index">
+                            <f:param name="i" value="0" />
+                        </p:menuitem>
+                        <p:menuitem value="课程中心" outcome="/allcourse/allcourses.xhtml">
+                            <f:param name="i" value="1" />
+                        </p:menuitem>
+                        <p:menuitem value="教师个人中心" outcome="/tecenter/tecenter_index.xhtml">
+                            <f:param name="i" value="2" />
+                        </p:menuitem>
+                        <p:menuitem value="学生个人中心" outcome="/stucenter/stucenter_index.xhtml">
+                            <f:param name="i" value="3" />
+                        </p:menuitem>
+                        <p:menuitem value="登录" outcome="/login">
+                            <f:param name="i" value="4" />
+                        </p:menuitem>
+                        <p:menuitem value="注册" outcome="/register">
+                            <f:param name="i" value="5" />
+                        </p:menuitem>
+                        
+
+                    </p:tabMenu>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                    <div style="text-align:center;margin:0 auto;" class="list-group list-group-horizontal">
+                        <h3>合作机构： </h3>
+                        <a href="#" class="list-group-item">阳光体育</a>
+                        <a href="#" class="list-group-item">可可英语</a>
+                        <a href="#" class="list-group-item">学而思</a>
+                        <a href="#" class="list-group-item">黑马程序员</a>
+                    </div>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="175" header="课程导航" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="课程分类">
+                            <p:menuitem value="英语" url="#" />
+                            <p:menuitem value="数学" outcome="/allcourse/math" />
+                            <p:menuitem value="体育" url="#" />
+                            <p:menuitem value="编程" url="#" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <div id="demo" class="carousel slide" data-ride="carousel" data-interval="1500">
+
+                        <!-- 指示符 -->
+                        <ul class="carousel-indicators">
+                            <li data-target="#demo" data-slide-to="0" class="active"></li>
+                            <li data-target="#demo" data-slide-to="1"></li>
+                            <li data-target="#demo" data-slide-to="2"></li>
+                        </ul>
+
+                        <!-- 轮播图片 -->
+                        <div class="carousel-inner" style="text-align: center;">
+                            <div class="carousel-item active">
+                                <img src="resources/img/english.jpg" style="height: 380px;width:600px;display: inline-block;"></img>
+                                <div class="carousel-caption">
+                                    <h3>英语口语</h3>
+                                    <p>英语</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="resources/img/math.jpg" style="height: 380px;width:600px;display: inline-block;"></img>
+                                <div class="carousel-caption">
+                                    <h3>认识微积分</h3>
+                                    <p>数学</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="resources/img/code.jpg" style="height: 380px;width:600px;display: inline-block;"></img>
+                                <div class="carousel-caption">
+                                    <h3>少儿编程</h3>
+                                    <p>编程</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br></br>
+                    <p>Goodkid课程充分开发孩子的大脑,给孩子科学,聪明,具体的陪伴;
+                        提供探究式体验环境,开发儿童智力,专注力,记忆力,情绪力,社交力,阅读力,语言能力,</p>
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
 </html>
 

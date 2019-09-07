@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CourseViewDlg" widgetVar="CourseViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCourseTitle}">
+            <h:form id="CourseViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{courseController.selected != null}">
+                        <h:outputText value="#{bundle.ViewCourseLabel_id}"/>
+                        <h:outputText value="#{courseController.selected.id}" title="#{bundle.ViewCourseTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewCourseLabel_name}"/>
+                        <h:outputText value="#{courseController.selected.name}" title="#{bundle.ViewCourseTitle_name}"/>
+                        <h:outputText value="#{bundle.ViewCourseLabel_type}"/>
+                        <h:outputText value="#{courseController.selected.type}" title="#{bundle.ViewCourseTitle_type}"/>
+                        <h:outputText value="#{bundle.ViewCourseLabel_description}"/>
+                        <h:outputText value="#{courseController.selected.description}" title="#{bundle.ViewCourseTitle_description}"/>
+                        <h:outputText value="#{bundle.ViewCourseLabel_teacherId}"/>
+                        <h:outputText value="#{courseController.selected.teacherId}" title="#{bundle.ViewCourseTitle_teacherId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="CourseViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

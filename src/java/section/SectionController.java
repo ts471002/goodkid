@@ -1,4 +1,4 @@
-package entity;
+package section;
 
 import entity.util.JsfUtil;
 import entity.util.JsfUtil.PersistAction;
@@ -17,23 +17,43 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("studentController")
+@Named("sectionController")
 @SessionScoped
-public class StudentController implements Serializable {
+public class SectionController implements Serializable {
 
     @EJB
-    private entity.StudentFacade ejbFacade;
-    private List<Student> items = null;
-    private Student selected;
+    private section.SectionFacade ejbFacade;
+    private List<Section> items = null;
+    private Section selected;
+    
+    private Integer id;
 
-    public StudentController() {
+    public SectionController() {
     }
 
-    public Student getSelected() {
+    public Section getSectionById() {
+        return ejbFacade.find(id);
+    }//???
+    
+    public Integer getSectionCount() {
+        return ejbFacade.count();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
+    
+    
+    public Section getSelected() {
         return selected;
     }
 
-    public void setSelected(Student selected) {
+    public void setSelected(Section selected) {
         this.selected = selected;
     }
 
@@ -43,36 +63,36 @@ public class StudentController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private StudentFacade getFacade() {
+    private SectionFacade getFacade() {
         return ejbFacade;
     }
 
-    public Student prepareCreate() {
-        selected = new Student();
+    public Section prepareCreate() {
+        selected = new Section();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("StudentCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("SectionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("StudentUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("SectionUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("StudentDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("SectionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Student> getItems() {
+    public List<Section> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -107,29 +127,29 @@ public class StudentController implements Serializable {
         }
     }
 
-    public Student getStudent(java.lang.Integer id) {
+    public Section getSection(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Student> getItemsAvailableSelectMany() {
+    public List<Section> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Student> getItemsAvailableSelectOne() {
+    public List<Section> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Student.class)
-    public static class StudentControllerConverter implements Converter {
+    @FacesConverter(forClass = Section.class)
+    public static class SectionControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            StudentController controller = (StudentController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "studentController");
-            return controller.getStudent(getKey(value));
+            SectionController controller = (SectionController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "sectionController");
+            return controller.getSection(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -149,11 +169,11 @@ public class StudentController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Student) {
-                Student o = (Student) object;
+            if (object instanceof Section) {
+                Section o = (Section) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Student.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Section.class.getName()});
                 return null;
             }
         }

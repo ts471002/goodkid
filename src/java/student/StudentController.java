@@ -1,9 +1,11 @@
-package entity;
+package student;
 
+import course.Course;
 import entity.util.JsfUtil;
 import entity.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,24 +18,109 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import teacher.Teacher;
 
-@Named("courseController")
+@Named("studentController")
 @SessionScoped
-public class CourseController implements Serializable {
+public class StudentController implements Serializable {
 
     @EJB
-    private entity.CourseFacade ejbFacade;
-    private List<Course> items = null;
-    private Course selected;
+    private student.StudentFacade ejbFacade;
+    private List<Student> items = null;
+    private Student selected;
+    private Integer id;
+    private String username;
+    private String email;
+    private String password;
+    private Character gender;
+    private Integer age;
 
-    public CourseController() {
+    public StudentController() {
     }
 
-    public Course getSelected() {
+    public Collection<Course> getCoursesByStudentId() {
+        return ejbFacade.find(id).getCourseCollection();
+    }
+
+    public Student getStudentByStudentId() {
+        return ejbFacade.find(id);
+    }
+
+    public String register() {
+        Student currentStudent = new Student(id, username, email, password);
+        currentStudent.setGender(gender);
+        currentStudent.setAge(age);
+        ejbFacade.create(currentStudent);
+        return "index.xhtml";
+    }
+
+    public String studentLogin() {
+        Student student = ejbFacade.find(id);
+        if (student == null || !student.getPassword().equals(password)) {
+            return "/login.xhtml";
+        } else {
+            return "/stucenter/stucenter_index.xhtml";
+        }
+    }
+
+    public String logout() {
+        this.id = null;
+        return "/index.xhtml";
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Character getGender() {
+        return gender;
+    }
+
+    public void setGender(Character gender) {
+        this.gender = gender;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Student getSelected() {
         return selected;
     }
 
-    public void setSelected(Course selected) {
+    public void setSelected(Student selected) {
         this.selected = selected;
     }
 
@@ -43,36 +130,36 @@ public class CourseController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private CourseFacade getFacade() {
+    private StudentFacade getFacade() {
         return ejbFacade;
     }
 
-    public Course prepareCreate() {
-        selected = new Course();
+    public Student prepareCreate() {
+        selected = new Student();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CourseCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("StudentCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CourseUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("StudentUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CourseDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("StudentDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Course> getItems() {
+    public List<Student> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -107,29 +194,29 @@ public class CourseController implements Serializable {
         }
     }
 
-    public Course getCourse(java.lang.Integer id) {
+    public Student getStudent(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Course> getItemsAvailableSelectMany() {
+    public List<Student> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Course> getItemsAvailableSelectOne() {
+    public List<Student> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Course.class)
-    public static class CourseControllerConverter implements Converter {
+    @FacesConverter(forClass = Student.class)
+    public static class StudentControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            CourseController controller = (CourseController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "courseController");
-            return controller.getCourse(getKey(value));
+            StudentController controller = (StudentController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "studentController");
+            return controller.getStudent(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -149,11 +236,11 @@ public class CourseController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Course) {
-                Course o = (Course) object;
+            if (object instanceof Student) {
+                Student o = (Student) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Course.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Student.class.getName()});
                 return null;
             }
         }

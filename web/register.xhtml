@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/usertemplate.xhtml">
+        <ui:define name="head">
+            <title>注册页面</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        </ui:define>
+        <ui:define name="body">
+            <p:tabView class="panel">
+                <p:tab title="学生注册">
+                    <h:form>
+                        <h:panelGrid columns="3">
+
+                            <p:outputLabel for="studentId" value="ID" />
+                            <p:inputText id="studentId" title="学生ID" value="#{studentController.id}" required="true" maxlength="25" />
+                            <p:message for="studentId" />
+
+                            <p:outputLabel for="studentName" value="姓名" />
+                            <p:inputText id="studentName" title="学生姓名" value="#{studentController.username}" required="true" maxlength="50" />
+                            <p:message for="studentName" />
+
+                            <p:outputLabel for="studentEmail" value="邮箱" />
+                            <p:inputText id="studentEmail" title="学生邮箱" value="#{studentController.email}" required="true" maxlength="50" />
+                            <p:message for="studentEmail" />
+
+                            <p:outputLabel for="studentPassword" value="密码" />
+                            <p:password id="studentPassword" title="学生密码" value="#{studentController.password}" required="true" maxlength="25" />
+                            <p:message for="studentPassword" />
+
+                            <p:outputLabel for="studentGender" value="性别" />
+                            <p:selectOneRadio id="studentGender" value="#{studentController.gender}">
+                                <f:selectItem itemValue="M" itemLabel="男" />
+                                <f:selectItem itemValue="F" itemLabel="女" />
+                            </p:selectOneRadio>
+                            <p:message for="studentGender" />
+
+                            <p:outputLabel for="studentAge" value="年龄" />
+                            <p:inputText id="studentAge" title="学生年龄" value="#{studentController.age}" maxlength="25" />
+                            <p:message for="studentAge" />
+
+                            <p:commandButton id="submit" value="学生注册" action="#{studentController.register}" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="老师注册">
+                    <h:form>
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="teacherId" value="ID" />
+                            <p:inputText id="teacherId" title="老师ID" value="#{teacherController.id}" required="true" maxlength="25" />
+                            <p:message for="teacherId" />
+
+                            <p:outputLabel for="teacherName" value="姓名" />
+                            <p:inputText id="teacherName" title="老师姓名" value="#{teacherController.username}" required="true" maxlength="50" />
+                            <p:message for="teacherName" />
+
+                            <p:outputLabel for="teacherEmail" value="邮箱" />
+                            <p:inputText id="teacherEmail" title="老师邮箱" value="#{teacherController.email}" required="true" maxlength="50" />
+                            <p:message for="teacherEmail" />
+
+                            <p:outputLabel for="teacherPassword" value="密码" />
+                            <p:password id="teacherPassword" title="老师密码" value="#{teacherController.password}" required="true" maxlength="25" />
+                            <p:message for="teacherPassword" />
+
+                            <p:outputLabel for="teacherDescription" value="描述" />
+                            <p:inputText id="teacherDescription" title="老师描述" value="#{teacherController.description}" maxlength="25" />
+                            <p:message for="teacherDescription" />
+
+                            <p:commandButton id="submit" value="老师注册" action="#{teacherController.register}" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </ui:define>
+    </ui:composition>
+</html>

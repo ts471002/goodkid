@@ -1,9 +1,12 @@
-package entity;
+package course;
 
+import course.Course;
 import entity.util.JsfUtil;
 import entity.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,24 +19,78 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import section.Section;
+import student.Student;
 
-@Named("sectionController")
+@Named("courseController")
 @SessionScoped
-public class SectionController implements Serializable {
+public class CourseController implements Serializable {
 
     @EJB
-    private entity.SectionFacade ejbFacade;
-    private List<Section> items = null;
-    private Section selected;
+    private student.StudentFacade studentFacade;
+    @EJB
+    private course.CourseFacade ejbFacade;
+    private List<Course> items = null;
+    private List<Course> itemsbyTeacher = null;
+    private Course selected;
+    private EntityManager em;
+    private Integer id = 1 ;
+    private List<Course> items1 =null ;
 
-    public SectionController() {
+    public CourseController() {
     }
 
-    public Section getSelected() {
+    public Course getSelected() {
         return selected;
     }
 
-    public void setSelected(Section selected) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getCurrentSectionId(){
+        Collection<Section> sections = ejbFacade.find(id).getSectionCollection();
+        Iterator<Section> iterator = sections.iterator();
+        while (iterator.hasNext()) {
+            Section next = iterator.next();
+            if (next.getChapterName().startsWith("第一章")) {
+                return next.getId();
+            }
+        }
+        return null;
+    }
+    
+    public Course getCourseById() {
+        return ejbFacade.find(id);
+    }
+    
+    public void addStudentToCourse(Integer studentId) {
+        Student student = studentFacade.find(studentId);
+        Course course = ejbFacade.find(id);
+        Collection<Course> courses = student.getCourseCollection();
+        Collection<Student> students = course.getStudentCollection();
+        courses.add(course);
+        students.add(student);      // 双向的
+        student.setCourseCollection(courses);
+        course.setStudentCollection(students);
+        studentFacade.edit(student);
+        ejbFacade.edit(course);
+    }
+
+    public List<Course> getItemsbytype() {
+        if (items1 == null) {
+            items1 = getFacade().getcoursebytype();
+        }
+        return items1;
+    }
+
+    public void setSelected(Course selected) {
         this.selected = selected;
     }
 
@@ -43,36 +100,36 @@ public class SectionController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private SectionFacade getFacade() {
+    private CourseFacade getFacade() {
         return ejbFacade;
     }
 
-    public Section prepareCreate() {
-        selected = new Section();
+    public Course prepareCreate() {
+        selected = new Course();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("SectionCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CourseCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("SectionUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CourseUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("SectionDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CourseDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Section> getItems() {
+    public List<Course> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -107,29 +164,29 @@ public class SectionController implements Serializable {
         }
     }
 
-    public Section getSection(java.lang.Integer id) {
+    public Course getCourse(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Section> getItemsAvailableSelectMany() {
+    public List<Course> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Section> getItemsAvailableSelectOne() {
+    public List<Course> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Section.class)
-    public static class SectionControllerConverter implements Converter {
+    @FacesConverter(forClass = Course.class)
+    public static class CourseControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            SectionController controller = (SectionController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "sectionController");
-            return controller.getSection(getKey(value));
+            CourseController controller = (CourseController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "courseController");
+            return controller.getCourse(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -149,11 +206,11 @@ public class SectionController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Section) {
-                Section o = (Section) object;
+            if (object instanceof Course) {
+                Course o = (Course) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Section.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Course.class.getName()});
                 return null;
             }
         }

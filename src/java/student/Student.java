@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package student;
 
+import course.Course;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,16 +26,17 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author ts
  */
 @Entity
-@Table(name = "teacher")
+@Table(name = "student")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Teacher.findAll", query = "SELECT t FROM Teacher t")
-    , @NamedQuery(name = "Teacher.findById", query = "SELECT t FROM Teacher t WHERE t.id = :id")
-    , @NamedQuery(name = "Teacher.findByUsername", query = "SELECT t FROM Teacher t WHERE t.username = :username")
-    , @NamedQuery(name = "Teacher.findByEmail", query = "SELECT t FROM Teacher t WHERE t.email = :email")
-    , @NamedQuery(name = "Teacher.findByPassword", query = "SELECT t FROM Teacher t WHERE t.password = :password")
-    , @NamedQuery(name = "Teacher.findByDescription", query = "SELECT t FROM Teacher t WHERE t.description = :description")})
-public class Teacher implements Serializable {
+    @NamedQuery(name = "Student.findAll", query = "SELECT s FROM Student s")
+    , @NamedQuery(name = "Student.findById", query = "SELECT s FROM Student s WHERE s.id = :id")
+    , @NamedQuery(name = "Student.findByUsername", query = "SELECT s FROM Student s WHERE s.username = :username")
+    , @NamedQuery(name = "Student.findByEmail", query = "SELECT s FROM Student s WHERE s.email = :email")
+    , @NamedQuery(name = "Student.findByPassword", query = "SELECT s FROM Student s WHERE s.password = :password")
+    , @NamedQuery(name = "Student.findByGender", query = "SELECT s FROM Student s WHERE s.gender = :gender")
+    , @NamedQuery(name = "Student.findByAge", query = "SELECT s FROM Student s WHERE s.age = :age")})
+public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,7 +52,7 @@ public class Teacher implements Serializable {
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="电子邮件无效")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 45)
     @Column(name = "email")
     private String email;
     @Basic(optional = false)
@@ -59,20 +60,21 @@ public class Teacher implements Serializable {
     @Size(min = 1, max = 32)
     @Column(name = "password")
     private String password;
-    @Size(max = 255)
-    @Column(name = "description")
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "teacherId")
+    @Column(name = "gender")
+    private Character gender;
+    @Column(name = "age")
+    private Integer age;
+    @ManyToMany(mappedBy = "studentCollection")
     private Collection<Course> courseCollection;
 
-    public Teacher() {
+    public Student() {
     }
 
-    public Teacher(Integer id) {
+    public Student(Integer id) {
         this.id = id;
     }
 
-    public Teacher(Integer id, String username, String email, String password) {
+    public Student(Integer id, String username, String email, String password) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -111,12 +113,20 @@ public class Teacher implements Serializable {
         this.password = password;
     }
 
-    public String getDescription() {
-        return description;
+    public Character getGender() {
+        return gender;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setGender(Character gender) {
+        this.gender = gender;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     @XmlTransient
@@ -138,10 +148,10 @@ public class Teacher implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Teacher)) {
+        if (!(object instanceof Student)) {
             return false;
         }
-        Teacher other = (Teacher) object;
+        Student other = (Student) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -150,7 +160,7 @@ public class Teacher implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Teacher[ id=" + id + " ]";
+        return "entity.Student[ id=" + id + " ]";
     }
     
 }

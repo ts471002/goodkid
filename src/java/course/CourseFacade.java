@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package course;
 
+import course.Course;
+import entity.AbstractFacade;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +17,7 @@ import javax.persistence.PersistenceContext;
  * @author ts
  */
 @Stateless
-public class SectionFacade extends AbstractFacade<Section> {
+public class CourseFacade extends AbstractFacade<Course> {
 
     @PersistenceContext(unitName = "goodkidPU")
     private EntityManager em;
@@ -24,8 +27,13 @@ public class SectionFacade extends AbstractFacade<Section> {
         return em;
     }
 
-    public SectionFacade() {
-        super(Section.class);
+    public CourseFacade() {
+        super(Course.class);
     }
     
+    public List<Course> getcoursebytype() {
+        List<Course> items=
+                (List<Course>) em.createNamedQuery("Course.findByType").setParameter("type","数学").getResultList();
+        return items;
+    }
 }

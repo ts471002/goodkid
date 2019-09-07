@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+            xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>#{courseController.setId(request.getParameter("courseid"))} #{courseController.courseById.name}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:layout fullPage="true" >
+<!--                <p:layoutUnit header="用户中心" position="north" size="100" collapsible="true" >
+                    <h:panelGrid  columns="2">
+                        <p:graphicImage height="50px" value="resources/images/duke.waving.gif" style="position:absolute;top:0;left:0"/>
+                        <h:link value="user" outcome="index" style="position:absolute;top:0;right:50px"/>                       
+                    </h:panelGrid>
+                </p:layoutUnit>-->
+                <p:layoutUnit position="center" size="100">
+                    <p:panel header="课程信息">
+                        <h:panelGrid columns="2" border="1" width="100%" style="min-height: 300px;text-align: center">
+                            <p:graphicImage value="resources/images/duke.waving.gif" />   
+                            <h:panelGrid columns="1" >
+                                <h:outputText value="课程名：#{courseController.courseById.name}"/><br/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid  columns="1" border="1" width="100%" style="min-height: 300px">
+                            <h:outputText value="课程介绍:#{courseController.courseById.description}" />
+                        </h:panelGrid> 
+                    </p:panel>
+                    <p:panel header="老师信息" >
+                        <h:panelGrid columns="2" border="1" width="100%" style="min-height: 300px" >
+                            <h:outputText value="老师介绍：#{courseController.courseById.teacherId.description}"/>
+                            <p:graphicImage value="resources/images/duke.waving.gif"/>     
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="章节信息">
+                        <p:panelGrid columns="3" style="min-height: 300px">
+                            <h:outputText value="章节介绍"/>
+                            <p:dataTable value="#{courseController.courseById.sectionCollection}" var="item" >
+                                <p:column >
+                                    <h:outputText value="#{item.chapterName}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <h:panelGrid columns="1" >
+                                <h:link  value="具体介绍" outcome="/sectionPage/section?sectionId=1"/>
+                                <p:commandButton id="createButton" value="新建章节" actionListener="#{sectionController.prepareCreate}" update=":SectionCreateForm" oncomplete="PF('SectionCreateDialog').show()"/>
+                                <h:commandButton value="back" action="/tecenter/tecenter_index"/>
+                            </h:panelGrid> 
+                        </p:panelGrid> 
+                    </p:panel>
+                </p:layoutUnit>
+                <p:layoutUnit header="" position="south" collapsible="true"></p:layoutUnit>
+            </p:layout>
+        </h:form>
+                    <ui:include src="Create.xhtml"/>
+
+    </h:body>
+</html>
